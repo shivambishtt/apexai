@@ -1,9 +1,10 @@
+import { Button } from "@/components/ui/button"
 
 function page() {
   return (
-    <div className="text-4xl  text-green-400">
-      Hello World
-    </div>
+    <Button>
+      Test
+    </Button>
   )
 }
 
