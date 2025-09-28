@@ -6,6 +6,7 @@ import { useState } from "react"
 import { authClient } from "@/lib/auth-client"
 
 function Page() {
+  const { data: session } = authClient.useSession()
   const [name, setName] = useState<string>("")
   const [email, setemail] = useState<string>("")
   const [password, setpassword] = useState<string>("")
@@ -24,10 +25,24 @@ function Page() {
       }
     }
     )
+    if (session) {
+      return (
+        <div className="flex flex-col p-4 gap-y-4">
+          <p>Logged in as {session?.user.name}</p>
+          <Button onClick={() => authClient.signOut()}>
+            Sign Out
+          </Button>
+
+        </div>
+      )
+
+    }
+
   }
 
   return (
     <div className="p-4 flex flex-col gap-y-4">
+
       <Input
         placeholder="name"
         value={name}
