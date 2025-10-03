@@ -15,6 +15,9 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { useForm } from "react-hook-form";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 const formSchema = zod.object({
   email: zod.string().email(),
@@ -25,6 +28,8 @@ const formSchema = zod.object({
 });
 
 function SigninView() {
+  const router = useRouter();
+  const [error, setError] = useState<string | null>(null);
   const form = useForm<zod.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -32,12 +37,17 @@ function SigninView() {
       password: "",
     },
   });
+
+  // when using onsubmit with ts + zod always mention the schema type for better safety
+  const onSubmit = async (data: zod.infer<typeof formSchema>) => {
+    setError(null); //ensures no error
+  };
   return (
     <div className="flex flex-col ">
-      <Card className="overflow-hidden  bg-gray-200 ">
+      <Card className="overflow-hidden flex justify-between px-5">
         <CardContent className="grid md:grid-cols-2 ">
           <Form {...form}>
-            <form className="p-2">
+            <form className="overflow-hidden">
               <div className="flex flex-col gap-6">
                 <div className="flex flex-col items-center text-center">
                   <h1 className="text-2xl font-bold md:text-3xl">
@@ -91,23 +101,44 @@ function SigninView() {
                     <AlertTitle>Error</AlertTitle>
                   </Alert>
                 )}
-                <Button className="w-full" type="submit">
+                <Button className="w-full text-white" type="submit">
                   Sign in
                 </Button>
-                <div className="relative text-center text-sm after:content-[''] after:absolute after:inset-0 after:top-1/2 after:z-0 after:border-t after:border-border">
-                  <span className="relative z-10 px-2 bg-card text-muted-foreground">
+                <div className="relative text-center text-sm after:content-[''] after:absolute after:inset-0 after:top-1/2 after:z-0 after:border-t after:border-border flex items-center justify-center gap-4">
+                  <span className="relative bottom-2 z-10 bg-card text-muted-foreground">
                     Or continue with
                   </span>
                 </div>
+                <div className="flex items-center justify-center gap-3 relative bottom-3">
+                  <Button variant="outline" type="button">
+                    Google
+                  </Button>
+                  <Button variant="outline" type="button">
+                    Github
+                  </Button>
+                </div>
+                <span className="flex items-center justify-center gap-2 relative bottom-4 ">
+                  Don&apos;t have an account? <br />{" "}
+                  <Link
+                    className="underline underline-offset-4 text-sm"
+                    href="/signup"
+                  >
+                    Signup
+                  </Link>
+                </span>
               </div>
             </form>
           </Form>
-          <div className="bg-radial bg-green-700 relative hidden md:flex flex-col gap-y-4 items-center justify-center">
-            <img src="/logo.svg" alt="Image" className="h-[92px] w-[92px]" />
+          <div className="bg-radial bg-green-700 relative overflow-hidden  md:flex flex-col gap-2 items-center justify-center">
+            {/* <img src="/logo.svg" alt="Image" className="h-[92px] w-[92px]" /> */}
             <p className="text-2xl  font-semibold text-white">Apex.ai</p>
           </div>
         </CardContent>
       </Card>
+      <div className="text-muted-foreground *:[a]:hover:text-primary text-center text-xs text-balance *:[a]:underline *:[a]:underline-offset-4">
+        By clicking continue, you agree to our <a href="#">Terms of service</a>{" "}
+        and <a href="#">Privacy Policy</a>
+      </div>
     </div>
   );
 }
