@@ -1,9 +1,9 @@
 "use client";
-import { Card } from "@/components/ui/card";
+import SignupView from "@/modules/auth/ui/views/signup-view";
 import React from "react";
 
 function page() {
-  return <Card>Sign Up Page</Card>;
+  return <SignupView />;
 }
 
 export default page;
