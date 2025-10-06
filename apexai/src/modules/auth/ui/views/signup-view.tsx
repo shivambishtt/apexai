@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Alert, AlertTitle } from "@/components/ui/alert";
 import { authClient } from "../../../../lib/auth-client";
 import { useForm } from "react-hook-form";
-// import { Spinner } from "@/components/ui/spinner";
+import { Spinner } from "@/components/ui/spinner";
 
 import {
   Form,
@@ -151,6 +151,26 @@ function SignupView() {
                     )}
                   />
                 </div>
+                <div>
+                  <FormField
+                    control={form.control}
+                    name="confirmPassword" // reads from defaultvalues of resolver
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Confirm Password -</FormLabel>
+                        <FormControl>
+                          <Input
+                            className="bg-transparent"
+                            type="password"
+                            // placeholder="********"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
 
                 {error && (
                   <Alert className="bg-destructive/10 border-none">
@@ -163,7 +183,7 @@ function SignupView() {
                   className="w-full text-white"
                   type="submit"
                 >
-                  {/* {pending && <Spinner />} */}
+                  {pending && <Spinner />}
                   Sign in
                 </Button>
                 <div className="relative text-center text-sm after:content-[''] after:absolute after:inset-0 after:top-1/2 after:z-0 after:border-t after:border-border flex items-center justify-center gap-4">
