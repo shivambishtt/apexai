@@ -9,6 +9,7 @@ import { Alert, AlertTitle } from "@/components/ui/alert";
 import { authClient } from "../../../../lib/auth-client";
 import { useForm } from "react-hook-form";
 import { Spinner } from "@/components/ui/spinner";
+import { FaGithub, FaGoogle } from "react-icons/fa";
 
 import {
   Form,
@@ -19,7 +20,6 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 const formSchema = zod
@@ -38,7 +38,6 @@ const formSchema = zod
   });
 
 function SignupView() {
-  const router = useRouter();
   const [error, setError] = useState<string | null>(null);
   const [pending, setPending] = useState<boolean>(false);
 
@@ -61,11 +60,11 @@ function SignupView() {
         name: data.name,
         email: data.email,
         password: data.password,
+        callbackURL: "/",
       },
       {
         onSuccess: () => {
           setPending(false);
-          router.push("/");
         },
         onError: ({ error }) => {
           setError(error?.message);
@@ -73,6 +72,22 @@ function SignupView() {
       }
     );
     setPending(false);
+  };
+
+  const onSocial = async (provider: "google" | "github") => {
+    setError(null); //ensures no error
+    authClient.signIn.social(
+      {
+        provider: provider,
+        callbackURL: "/",
+      },
+      {
+        onSuccess: () => {},
+        onError: ({ error }) => {
+          setError(error.message);
+        },
+      }
+    );
   };
   return (
     <div className="flex flex-col">
@@ -192,11 +207,21 @@ function SignupView() {
                   </span>
                 </div>
                 <div className="flex items-center justify-center gap-3 relative bottom-3">
-                  <Button disabled={pending} variant="outline" type="button">
-                    Google
+                  <Button
+                    onClick={() => onSocial("google")}
+                    disabled={pending}
+                    variant="outline"
+                    type="button"
+                  >
+                    <FaGoogle />
                   </Button>
-                  <Button disabled={pending} variant="outline" type="button">
-                    Github
+                  <Button
+                    disabled={pending}
+                    onClick={() => onSocial("github")}
+                    variant="outline"
+                    type="button"
+                  >
+                    <FaGithub />
                   </Button>
                 </div>
                 <span className="flex items-center justify-center gap-2 relative bottom-4 ">
