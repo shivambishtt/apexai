@@ -16,6 +16,7 @@ import {
 } from "@/components/ui/form";
 import { useForm } from "react-hook-form";
 import Link from "next/link";
+import { FaGithub, FaGoogle } from "react-icons/fa";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { authClient } from "@/lib/auth-client";
@@ -46,6 +47,23 @@ function SigninView() {
       {
         email: data.email,
         password: data.password,
+      },
+      {
+        onSuccess: () => {
+          router.push("/");
+        },
+        onError: ({ error }) => {
+          setError(error.message);
+        },
+      }
+    );
+  };
+
+  const onSocial = async (provider: "google" | "github") => {
+    setError(null);
+    authClient.signIn.social(
+      {
+        provider: provider,
       },
       {
         onSuccess: () => {
@@ -128,11 +146,19 @@ function SigninView() {
                   </span>
                 </div>
                 <div className="flex items-center justify-center gap-3 relative bottom-3">
-                  <Button variant="outline" type="button">
-                    Google
+                  <Button
+                    onClick={() => onSocial("google")}
+                    variant="outline"
+                    type="button"
+                  >
+                    <FaGoogle />
                   </Button>
-                  <Button variant="outline" type="button">
-                    Github
+                  <Button
+                    onClick={() => onSocial("github")}
+                    variant="outline"
+                    type="button"
+                  >
+                    <FaGithub />
                   </Button>
                 </div>
                 <span className="flex items-center justify-center gap-2 relative bottom-4 ">
