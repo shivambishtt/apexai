@@ -1,14 +1,31 @@
 "use client";
-import { CommandDialog, CommandInput } from "cmdk";
 import React from "react";
+import {
+  CommandDialog,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from "@/components/ui/command";
 
-function DashboardCommand() {
+interface DashboardCommandProps {
+  open: boolean;
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+function DashboardCommand({ open, setOpen }: DashboardCommandProps) {
   return (
-    <div>
-      <CommandDialog>
-        <CommandInput />
-      </CommandDialog>
-    </div>
+    <CommandDialog className="" open={open} onOpenChange={setOpen}>
+      <CommandInput placeholder="Find a meeting or an agent" />
+      <CommandList>
+        <CommandEmpty>No results found.</CommandEmpty> 
+        <CommandGroup heading="Suggestions">
+          <CommandItem>Test</CommandItem>
+          <CommandItem>Another Option</CommandItem>
+        </CommandGroup>
+      </CommandList>
+    </CommandDialog>
   );
 }
 
